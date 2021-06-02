@@ -1,10 +1,15 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:grapfood/utility/my_constant.dart';
 import 'package:grapfood/utility/my_style.dart';
+import 'package:grapfood/utility/normal_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddInfomationShop extends StatefulWidget {
   @override
@@ -15,14 +20,27 @@ class _AddInfomationShopState extends State<AddInfomationShop> {
   double lat = 0.0;
   double lng = 0.0;
   var nameShop, address, phone;
+  var id;
   final picker = ImagePicker();
   var file;
+  String url = '${MyConstant().domain}/saveShop.php';
+  String urlEdit = '${MyConstant().domain}/editUserWhereId.php';
+  var urlImage;
 
   @override
   void initState() {
     fondLatLng();
+    findId();
     // TODO: implement initState
     super.initState();
+  }
+
+  Future<Null> findId() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      id = preferences.getString('id')!;
+      print('UserID = $id');
+    });
   }
 
   Future<Null> fondLatLng() async {
@@ -36,7 +54,6 @@ class _AddInfomationShopState extends State<AddInfomationShop> {
       });
     } catch (e) {}
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +76,9 @@ class _AddInfomationShopState extends State<AddInfomationShop> {
             Container(
               height: 300.0,
               child: lat == 0.0 ? MyStyle().showProgress() : showMap(),
-            )
+            ),
+            MyStyle().mySizebox(),
+            btnSaveInformation(),
           ],
         ),
       ),
@@ -170,6 +189,37 @@ class _AddInfomationShopState extends State<AddInfomationShop> {
     );
   }
 
+  Widget btnSaveInformation() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: RaisedButton.icon(
+        color: MyStyle().primaryColor,
+        onPressed: () {
+          if (nameShop == null ||
+              nameShop.isEmpty ||
+              address == null ||
+              address.isEmpty ||
+              phone == null ||
+              phone.isEmpty) {
+            normalDialog(context, 'กรุณากรอกข้อมูลทุกช่อง');
+          } else if (file == null) {
+            normalDialog(context, 'กรุณาเลือกรุปภาพด้วยน่ะค่ะ');
+          } else {
+            uploadImage();
+          }
+        },
+        icon: Icon(
+          Icons.save,
+          color: Colors.white,
+        ),
+        label: Text(
+          'Save Infomation',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
+
   Set<Marker> myMarker() {
     return <Marker>[
       Marker(
@@ -182,11 +232,12 @@ class _AddInfomationShopState extends State<AddInfomationShop> {
   }
 
   Container showMap() {
-    print('latitude= $lat');
-    print('longitude= $lng');
+    // print('latitude= $lat');
+    // print('longitude= $lng');
     LatLng latlng = LatLng(lat, lng);
     CameraPosition cameraPosition = CameraPosition(target: latlng, zoom: 15.0);
     return Container(
+      margin: EdgeInsets.all(20.0),
       height: 300.0,
       child: GoogleMap(
         initialCameraPosition: cameraPosition,
@@ -195,5 +246,44 @@ class _AddInfomationShopState extends State<AddInfomationShop> {
         markers: myMarker(),
       ),
     );
+  }
+
+  Future<Null> uploadImage() async {
+    Random random = Random();
+    int i = random.nextInt(10000000);
+    String nameImage = '$nameShop$i.jpg';
+
+    try {
+      Map<String, dynamic> map = Map();
+      map['file'] =
+          await MultipartFile.fromFile(file.path, filename: nameImage);
+      FormData formData = FormData.fromMap(map);
+      await Dio().post(url, data: formData).then((value) {
+        print('Response ====>> $value');
+        urlImage = 'grapfood/Shop/$nameImage';
+        print(urlImage);
+        editUserShop();
+      });
+    } catch (e) {}
+  }
+
+  Future<Null> editUserShop() async {
+    print(
+        'NmaeShop: $nameShop Address:$address Phone: $phone UrlImage : $urlImage Latitude: $lat Longtitude: $lng');
+
+    String urlEdit =
+        '${MyConstant().domain}/editUserWhereId.php/?isAdd=true&id=$id&nameshop=$nameShop&address=$address&phone=$phone&uriPicture=$urlImage&lat=$lat&lng=$lng';
+    try {
+       await Dio().get(urlEdit).then((value) {
+         if(value.toString()=='true'){
+           Navigator.pop(context);
+         }else {
+           normalDialog(context, 'ไม่สามารถบันทึกข้อมูลได้');
+         }
+       });
+
+    } catch (e) {
+      normalDialog(context, 'ไม่สามารถติดต่อ Server ได้');
+    }
   }
 }

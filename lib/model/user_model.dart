@@ -10,6 +10,7 @@ class UserModel {
   String uriPicture ="";
   String lat ="";
   String lng= "";
+  String token = "";
 
   UserModel(
       {required this.id,
@@ -22,7 +23,8 @@ class UserModel {
         required this.phone,
         required this.uriPicture,
         required this.lat,
-        required this.lng});
+        required this.lng,
+        required this.token});
 
   UserModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -36,6 +38,7 @@ class UserModel {
     uriPicture = json['UriPicture'];
     lat = json['Lat'];
     lng = json['Lng'];
+    token = json['token'];
   }
 
   Map<String, dynamic> toJson() {
@@ -51,6 +54,7 @@ class UserModel {
     data['UriPicture'] = this.uriPicture;
     data['Lat'] = this.lat;
     data['Lng'] = this.lng;
+    data['token']= this.token;
     return data;
   }
 }

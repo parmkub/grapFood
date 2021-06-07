@@ -3,6 +3,7 @@ import 'package:grapfood/utility/my_style.dart';
 import 'package:grapfood/utility/singout_process.dart';
 import 'package:grapfood/widget/infomation_shop.dart';
 import 'package:grapfood/widget/list_food_menu_shop.dart';
+import 'package:grapfood/widget/order_list_shop.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainShop extends StatefulWidget {
@@ -18,6 +19,7 @@ class _MainShopState extends State<MainShop> {
   @override
   void initState() {
     findUser();
+    currentWidget = OrderListShop();
     // TODO: implement initState
     super.initState();
 
@@ -74,7 +76,7 @@ class _MainShopState extends State<MainShop> {
       subtitle: Text('รายการอาหารที่ยังไม่ได้ทำส่ง'),
       onTap: () {
         setState(() {
-           //currentWidget = OrderListShop();
+           currentWidget = OrderListShop();
         });
         Navigator.pop(context);
       },

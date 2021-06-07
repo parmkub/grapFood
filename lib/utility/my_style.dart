@@ -20,12 +20,12 @@ class MyStyle {
   Text showTitleH1(String title) => Text(
         title,
         style: TextStyle(
-            fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+            fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold),
       );
   Text showTitleH2(String title) => Text(
         title,
         style: TextStyle(
-            fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+            fontSize: 18, color: Colors.blue, fontWeight: FontWeight.bold),
       );
   Container showLogo() {
     return Container(

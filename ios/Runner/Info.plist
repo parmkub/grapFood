@@ -48,7 +48,11 @@
     <key>NSLocationAlwaysUsageDescription</key>
     <string></string>
     
-    <key></key>
-    <string></string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Give a photo </string>
+    <key>NSCameraUsageDescription</key>
+    <string>Use Camera</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Use Microphone</string>
 </dict>
 </plist>

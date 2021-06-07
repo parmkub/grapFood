@@ -23,8 +23,8 @@ class _AddInfomationShopState extends State<AddInfomationShop> {
   var id;
   final picker = ImagePicker();
   var file;
-  String url = '${MyConstant().domain}/saveShop.php';
-  String urlEdit = '${MyConstant().domain}/editUserWhereId.php';
+  String url = '${MyConstant().domain}grapfood/saveShop.php';
+  String urlEdit = '${MyConstant().domain}gropfood/editUserWhereId.php';
   var urlImage;
 
   @override
@@ -131,6 +131,7 @@ class _AddInfomationShopState extends State<AddInfomationShop> {
           ),
         ],
       );
+
 
   Future<Null> getImage() async {
     final pickedFile = await picker.getImage(
@@ -272,16 +273,15 @@ class _AddInfomationShopState extends State<AddInfomationShop> {
         'NmaeShop: $nameShop Address:$address Phone: $phone UrlImage : $urlImage Latitude: $lat Longtitude: $lng');
 
     String urlEdit =
-        '${MyConstant().domain}/editUserWhereId.php/?isAdd=true&id=$id&nameshop=$nameShop&address=$address&phone=$phone&uriPicture=$urlImage&lat=$lat&lng=$lng';
+        '${MyConstant().domain}grapfood/editUserWhereId.php/?isAdd=true&id=$id&nameshop=$nameShop&address=$address&phone=$phone&uriPicture=$urlImage&lat=$lat&lng=$lng';
     try {
-       await Dio().get(urlEdit).then((value) {
-         if(value.toString()=='true'){
-           Navigator.pop(context);
-         }else {
-           normalDialog(context, 'ไม่สามารถบันทึกข้อมูลได้');
-         }
-       });
-
+      await Dio().get(urlEdit).then((value) {
+        if (value.toString() == 'true') {
+          Navigator.pop(context);
+        } else {
+          normalDialog(context, 'ไม่สามารถบันทึกข้อมูลได้');
+        }
+      });
     } catch (e) {
       normalDialog(context, 'ไม่สามารถติดต่อ Server ได้');
     }

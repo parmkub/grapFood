@@ -6,6 +6,7 @@ import 'package:grapfood/model/user_model.dart';
 import 'package:grapfood/screens/main_rider.dart';
 import 'package:grapfood/screens/main_shop.dart';
 import 'package:grapfood/screens/main_user.dart';
+import 'package:grapfood/utility/my_constant.dart';
 import 'package:grapfood/utility/my_style.dart';
 import 'package:grapfood/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -117,7 +118,7 @@ class _SignInState extends State<SignIn> {
     );
   }
   Future<Null> checkAuthens() async {
-    String url = 'http://61.7.142.47:8080/grapfood/getUserWhereUser.php?isAdd=true&User=$user';
+    String url = '${MyConstant().domain}grapfood/getUserWhereUser.php?isAdd=true&User=$user';
     try{
        Response response = await Dio().get(url);
        if(response.toString() == 'null'){

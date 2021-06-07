@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:grapfood/utility/my_constant.dart';
 import 'package:grapfood/utility/my_style.dart';
 import 'package:grapfood/utility/normal_dialog.dart';
 import 'package:grapfood/utility/singout_process.dart';
@@ -185,7 +186,7 @@ class _SignUpState extends State<SignUp> {
   }
 
   Future<Null> checkUser() async{
-    String url = 'http://61.7.142.47:8080/grapfood/getUserWhereUser.php?isAdd=true&User=$user';
+    String url = '${MyConstant().domain}grapfood/getUserWhereUser.php?isAdd=true&User=$user';
     Response response = await Dio().get(url);
     try{
       if(response.toString()== 'null'){
@@ -199,7 +200,7 @@ class _SignUpState extends State<SignUp> {
   }
 
   Future<Null> registerThread() async{
-    String url = 'http://61.7.142.47:8080/grapfood/addUser.php?isAdd=true&ChooseType=$chooseType&Name=$name&User=$user&Password=$password';
+    String url = '${MyConstant().domain}grapfood/addUser.php?isAdd=true&ChooseType=$chooseType&Name=$name&User=$user&Password=$password';
     Response response = await Dio().get(url);
     try{
      if(response.toString()== 'true'){

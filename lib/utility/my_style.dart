@@ -10,6 +10,9 @@ class MyStyle {
     );
   }
 
+  TextStyle mainTitle = TextStyle(fontSize: 18.0,fontWeight: FontWeight.bold,color: Colors.purple,);
+  TextStyle mainTitleH2Title = TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold,color: Colors.green.shade700,);
+
   Text showTitle(String title) => Text(
         title,
         style: TextStyle(

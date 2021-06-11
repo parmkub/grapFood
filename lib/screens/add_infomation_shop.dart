@@ -261,7 +261,7 @@ class _AddInfomationShopState extends State<AddInfomationShop> {
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) {
         print('Response ====>> $value');
-        urlImage = 'grapfood/Shop/$nameImage';
+        urlImage = 'grapfood/Food/$nameImage';
         print(urlImage);
         editUserShop();
       });
